@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Three.js Image Detection</title>
+  <title>AR with Three.js</title>
   <style>
     body {
       margin: 0;
@@ -16,62 +16,7 @@
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
-  <script>
-    let scene, camera, renderer;
-    let model;
-
-    async function main() {
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
-
-      // Load a model or create your 3D scene here
-      const geometry = new THREE.BoxGeometry();
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      const cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
-
-      camera.position.z = 5;
-
-      // Load TensorFlow.js model (example with COCO-SSD)
-      model = await cocoSsd.load();
-
-      // Render loop
-      animate();
-    }
-
-    async function detectObjects() {
-      const image = document.createElement('img');
-      image.src = 'assets/images/CapadeLivro.jpeg'; // Replace with path to your image
-
-      // Use TensorFlow.js COCO-SSD model for object detection
-      const predictions = await model.detect(image);
-
-      // Example: render a cube at detected object position
-      predictions.forEach(prediction => {
-        const { bbox } = prediction;
-        const boxSize = new THREE.Vector3(bbox[2], bbox[3], 1);
-        const boxPosition = new THREE.Vector3(bbox[0] + bbox[2] / 2 - window.innerWidth / 2, -bbox[1] - bbox[3] / 2 + window.innerHeight / 2, -10);
-
-        const geometry = new THREE.BoxGeometry(boxSize.x, boxSize.y, boxSize.z);
-        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        const box = new THREE.Mesh(geometry, material);
-        box.position.copy(boxPosition);
-        scene.add(box);
-      });
-    }
-
-    function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    }
-
-    main();
-    detectObjects(); // Call this function to detect objects in the image
-  </script>
+  <script src="js/ar.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
