@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Augmented Reality with Three.js and WebXR</title>
+  <title>Augmented Reality with Three.js and AR.js</title>
   <style>
     body {
       margin: 0;
@@ -13,48 +13,16 @@
       display: block;
     }
   </style>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
 </head>
-<body>
-  <!-- Incluindo o Three.js -->
-  <script src="js/three.min.js"></script>
-  
-  <!-- Script principal da aplicação -->
-  <script>
-    // Variáveis globais para Three.js
-    let scene, camera, renderer;
-    let cube;
-
-    // Função de inicialização da cena Three.js
-    function init() {
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
-
-      // Exemplo: adicionar um cubo como objeto 3D
-      const geometry = new THREE.BoxGeometry();
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
-
-      camera.position.z = 5;
-
-      animate();
-    }
-
-    // Função para animar a cena (renderização contínua)
-    function animate() {
-      renderer.setAnimationLoop(render);
-    }
-
-    // Função de renderização da cena
-    function render() {
-      renderer.render(scene, camera);
-    }
-
-    // Iniciar a aplicação ao carregar a página
-    window.addEventListener('DOMContentLoaded', init);
-  </script>
+<body style="margin : 0px; overflow: hidden;">
+  <a-scene embedded arjs="sourceType: webcam;">
+    <a-marker preset="custom" type="pattern" url="assets/images/marker.png">
+      <!-- Adicione aqui o objeto 3D que você deseja exibir sobre o marcador -->
+      <a-box position="0 0.5 0" material="color: yellow;"></a-box>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
 </body>
 </html>
