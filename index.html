@@ -31,7 +31,7 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      // Criando um cubo verde
+      // Adicionando um cubo verde inicialmente
       const geometry = new THREE.BoxGeometry();
       const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
       cube = new THREE.Mesh(geometry, material);
@@ -39,17 +39,10 @@
 
       scene.add(cube);
 
-      // Carregar a imagem para usar como marcador
-      const loader = new THREE.TextureLoader();
-      loader.load('assets/images/marker.jpeg', function(texture) {
-        const planeGeometry = new THREE.PlaneGeometry(5, 5); // Geometria do plano para a imagem
-        const planeMaterial = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
-        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        scene.add(plane);
-      });
-
+      // Configurações da câmera e do controle de movimento
       camera.position.z = 5;
 
+      // Animação
       animate();
     }
 
