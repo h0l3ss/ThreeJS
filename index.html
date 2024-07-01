@@ -11,9 +11,7 @@
 </head>
 <body>
   <a-scene embedded arjs="sourceType: webcam;">
-    <a-marker preset="custom" type="pattern" url="assets/markers/book-cover.patt">
-      <a-plane src="assets/images/book-cover.png" height="1.5" width="1"></a-plane>
-    </a-marker>
+    <a-marker-camera preset="custom" type="pattern" url="assets/images/book-cover.png"></a-marker-camera>
     <a-entity camera></a-entity>
   </a-scene>
 </body>
