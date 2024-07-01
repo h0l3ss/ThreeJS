@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Augmented Reality with Three.js</title>
+  <title>Augmented Reality with Webcam and Three.js</title>
   <style>
     body {
       margin: 0;
@@ -39,7 +39,23 @@
 
       scene.add(cube);
 
-      // Configurações da câmera e do controle de movimento
+      // Configurando a câmera para capturar vídeo da webcam
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+          const video = document.createElement('video');
+          video.srcObject = stream;
+          video.play();
+
+          const videoTexture = new THREE.VideoTexture(video);
+          const videoMaterial = new THREE.MeshBasicMaterial({ map: videoTexture });
+          const planeGeometry = new THREE.PlaneGeometry(16, 9); // Geometria do plano
+          const plane = new THREE.Mesh(planeGeometry, videoMaterial);
+          scene.add(plane);
+        })
+        .catch(function(error) {
+          console.error('Erro ao acessar a webcam:', error);
+        });
+
       camera.position.z = 5;
 
       // Animação
