@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Augmented Reality with Three.js and AR.js</title>
+  <title>Augmented Reality with Three.js</title>
   <style>
     body {
       margin: 0;
@@ -13,18 +13,50 @@
       display: block;
     }
   </style>
-  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+  <!-- Importando a biblioteca Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
-<body style="margin: 0; overflow: hidden;">
-  <a-scene embedded arjs="sourceType: webcam;">
-    <a-marker type="pattern" url="assets/images/marker.jpeg">
-      <!-- Adicione aqui o objeto 3D que você deseja exibir sobre o marcador -->
-      <a-entity position="0 0 0">
-        <a-box position="0 0.5 0" material="color: green;"></a-box>
-      </a-entity>
-    </a-marker>
-    <a-entity camera></a-entity>
-  </a-scene>
+<body>
+  <script>
+    let scene, camera, renderer;
+    let cube;
+
+    init();
+
+    function init() {
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Criando um cubo verde
+      const geometry = new THREE.BoxGeometry();
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      cube = new THREE.Mesh(geometry, material);
+      cube.position.set(0, 0, -5); // Posição inicial do cubo
+
+      scene.add(cube);
+
+      // Carregar a imagem para usar como marcador
+      const loader = new THREE.TextureLoader();
+      loader.load('assets/images/marker.jpeg', function(texture) {
+        const planeGeometry = new THREE.PlaneGeometry(5, 5); // Geometria do plano para a imagem
+        const planeMaterial = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        scene.add(plane);
+      });
+
+      camera.position.z = 5;
+
+      animate();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+  </script>
 </body>
 </html>
